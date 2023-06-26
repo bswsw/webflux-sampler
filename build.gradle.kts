@@ -18,9 +18,16 @@ repositories {
     mavenCentral()
 }
 
+val kotlinLoggingVersion = "3.0.5"
+
 dependencies {
     implementation("io.projectreactor.kafka:reactor-kafka")
     implementation("org.springframework.kafka:spring-kafka")
+
+    // https://mvnrepository.com/artifact/io.github.microutils/kotlin-logging
+    implementation("io.github.microutils:kotlin-logging:${kotlinLoggingVersion}")
+    // https://mvnrepository.com/artifact/io.github.microutils/kotlin-logging-jvm
+    runtimeOnly("io.github.microutils:kotlin-logging-jvm:${kotlinLoggingVersion}")
 
     implementation("org.springframework.boot:spring-boot-starter-webflux")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
