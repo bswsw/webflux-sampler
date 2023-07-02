@@ -1,4 +1,4 @@
-package bsw.webfluxsampler.sample
+package bsw.webfluxsampler.reactor
 
 import mu.KotlinLogging
 import org.springframework.stereotype.Component
@@ -7,7 +7,7 @@ import java.time.Duration
 
 @Component
 class FluxSample {
-    fun subscribe() {
+    fun run() {
         val flux = Flux
             .range(1, 1000)
             .delayElements(Duration.ofMillis(100))
