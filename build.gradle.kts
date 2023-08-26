@@ -1,9 +1,8 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
     id("org.springframework.boot") version "3.1.0"
     id("io.spring.dependency-management") version "1.1.0"
     kotlin("jvm") version "1.8.21"
+    kotlin("kapt") version "1.8.21"
     kotlin("plugin.spring") version "1.8.21"
 }
 
@@ -19,14 +18,18 @@ repositories {
 }
 
 val kotlinLoggingVersion = "3.0.5"
+val mapstructVersion = "1.5.5.Final"
 
 dependencies {
     implementation("io.projectreactor.kafka:reactor-kafka")
     implementation("org.springframework.kafka:spring-kafka")
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
 
-    // https://mvnrepository.com/artifact/io.github.microutils/kotlin-logging
+    implementation("org.mapstruct:mapstruct:${mapstructVersion}")
+    kapt("org.mapstruct:mapstruct-processor:${mapstructVersion}")
+    kaptTest("org.mapstruct:mapstruct-processor:${mapstructVersion}")
+
     implementation("io.github.microutils:kotlin-logging:${kotlinLoggingVersion}")
-    // https://mvnrepository.com/artifact/io.github.microutils/kotlin-logging-jvm
     runtimeOnly("io.github.microutils:kotlin-logging-jvm:${kotlinLoggingVersion}")
 
     implementation("org.springframework.boot:spring-boot-starter-webflux")
@@ -39,13 +42,15 @@ dependencies {
     testImplementation("io.projectreactor:reactor-test")
 }
 
-tasks.withType<KotlinCompile> {
-    kotlinOptions {
-        freeCompilerArgs += "-Xjsr305=strict"
-        jvmTarget = "17"
+tasks {
+    compileKotlin {
+        kotlinOptions {
+            freeCompilerArgs += "-Xjsr305=strict"
+            jvmTarget = "17"
+        }
     }
-}
 
-tasks.withType<Test> {
-    useJUnitPlatform()
+    test {
+        useJUnitPlatform()
+    }
 }
