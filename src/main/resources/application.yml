@@ -3,3 +3,8 @@ spring:
     scheduling:
       pool:
         size: 20
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    use-root-path: true

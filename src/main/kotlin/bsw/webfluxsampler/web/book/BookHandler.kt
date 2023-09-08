@@ -15,7 +15,7 @@ import java.net.URI
 @Component("bookHandlerV1")
 class BookHandler(private val mapper: BookMapper) {
 
-    fun create(request: ServerRequest) =
+    fun create(request: ServerRequest): Mono<ServerResponse> =
         request
             .bodyToMono<BookBody.Post>()
             .flatMap { saveBook(it.bookName) }
@@ -25,7 +25,7 @@ class BookHandler(private val mapper: BookMapper) {
                     .build()
             }
 
-    fun update(request: ServerRequest) =
+    fun update(request: ServerRequest): Mono<ServerResponse> =
         Mono
             .just(request.pathVariable("book-id").toLong())
             .zipWith(request.bodyToMono<BookBody.Patch>())
@@ -37,7 +37,7 @@ class BookHandler(private val mapper: BookMapper) {
             }
             .switchIfEmpty { ServerResponse.notFound().build() }
 
-    fun getList(request: ServerRequest) =
+    fun getList(request: ServerRequest): Mono<ServerResponse> =
         findBooks()
             .collectList()
             .flatMap {
@@ -46,7 +46,7 @@ class BookHandler(private val mapper: BookMapper) {
                     .bodyValue(it.map(mapper::bookToResponse))
             }
 
-    fun getOne(request: ServerRequest) =
+    fun getOne(request: ServerRequest): Mono<ServerResponse> =
         Mono
             .just(request.pathVariable("book-id").toLong())
             .flatMap(::findBook)
